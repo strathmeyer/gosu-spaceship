@@ -27,8 +27,15 @@ class Honeybun
   end
 
   def move
-  	@x = (@x + (rand 3) - 1) % @window.width
-  	@y = (@y + (rand 3) - 1) % @window.height
+  	speed = 6
+  	@x = @x + (((rand 3) - 1) * speed)
+  	@y = @y + (((rand 3) - 1) * speed)
 
+  	stay_in_bounds
+  end
+
+  def stay_in_bounds
+  	@x = @x % @window.width
+  	@y = @y % @window.height
   end
 end
