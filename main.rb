@@ -26,7 +26,7 @@ class GameWindow < Gosu::Window
     # Put the player in the middle of the screen
     @player.warp(20, 20)
 
-    # Create a honeybun
+    # Create the honeybun list
     @honeybuns = []
     
     # Create the fuel display
@@ -54,7 +54,13 @@ class GameWindow < Gosu::Window
       @player.go_down
     end
 
+    # Try to collect any honeybuns
     @player.collect(@honeybuns)
+
+    # We could do something with each honeybun here
+    @honeybuns.each do |h|
+      # h.do_something
+    end
 
     # Call our "ever_second" function every ten seconds
     seconds = Gosu::milliseconds / 1000
@@ -72,7 +78,7 @@ class GameWindow < Gosu::Window
   end
 
   def every_second
-    if @honeybuns.empty? then
+    if @honeybuns.size < 1 then
       @honeybuns.push(Honeybun.new(self))
     end
 

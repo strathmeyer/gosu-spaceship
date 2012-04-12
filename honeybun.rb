@@ -6,6 +6,8 @@ class Honeybun
 
   	@x = (window.width / 2)
     @y = (window.height / 2)
+
+    @window = window
   end
 
   def draw
@@ -22,5 +24,11 @@ class Honeybun
 
   def height
   	@img.height
+  end
+
+  def move
+  	@x = (@x + (rand 3) - 1) % @window.width
+  	@y = (@y + (rand 3) - 1) % @window.height
+
   end
 end
