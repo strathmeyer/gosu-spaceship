@@ -59,7 +59,8 @@ class GameWindow < Gosu::Window
 
     # We could do something with each honeybun here
     @honeybuns.each do |h|
-      # h.do_something
+      # move each honeybun
+      h.move 
     end
 
     # Call our "ever_second" function every ten seconds
@@ -78,8 +79,13 @@ class GameWindow < Gosu::Window
   end
 
   def every_second
-    if @honeybuns.size < 1 then
-      @honeybuns.push(Honeybun.new(self))
+
+    if @honeybuns.size < 3 then
+      # select a random type of honeybun
+      type = [Honeybun, Honeybun, BlueHoneybun].sample
+
+      # add a honebun of that type to our list
+      @honeybuns.push(type.new(self))
     end
 
     @player.fuel = @player.fuel - 1
@@ -92,7 +98,7 @@ class GameWindow < Gosu::Window
       h.draw
     end
 
-    @font.draw("Fuel: #{@player.fuel}", 10, 10, ZOrder::UI)
+    @font.draw("Fuel: #{@player.fuel}   Speed: #{@player.speed}", 10, 10, ZOrder::UI)
   end
 end
 

@@ -1,9 +1,9 @@
 class Player
   IMAGE_ROT = 38
-  SPEED = 5
-
-  attr_accessor :fuel
-  attr_reader :x, :y
+  MAX_SPEED = 20
+  MAX_FUEL = 100
+  
+  attr_reader :x, :y, :speed, :fuel
 
   def initialize(window, max_x, max_y)
     @window = window
@@ -13,29 +13,39 @@ class Player
     @max_x = max_x
     @max_y = max_y
     @fuel = 50
+    @speed = 5
   end
 
   def warp(x, y)
     @x, @y = x, y
   end
 
+  def speed=(s)
+    @speed = [s, MAX_SPEED].min
+  end
+
+  def fuel=(s)
+    @fuel = [s, MAX_FUEL].min
+  end
+
+
   def go_right
-    @x = @x + SPEED
+    @x = @x + @speed
     stay_in_bounds
   end
 
   def go_left
-    @x = @x - SPEED
+    @x = @x - @speed
     stay_in_bounds
   end
 
   def go_up
-    @y = @y - SPEED
+    @y = @y - @speed
     stay_in_bounds
   end
 
   def go_down
-    @y = @y + SPEED
+    @y = @y + @speed
     stay_in_bounds
   end
 
