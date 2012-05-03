@@ -13,7 +13,7 @@ class Player
     @max_x = max_x
     @max_y = max_y
     @fuel = 50
-    @speed = 5
+    @speed = 10
   end
 
   def warp(x, y)
@@ -22,12 +22,29 @@ class Player
 
   def speed=(s)
     @speed = [s, MAX_SPEED].min
+    @speed = [s, 5].max
   end
 
   def fuel=(s)
     @fuel = [s, MAX_FUEL].min
+    @fuel = [s, 0].max
   end
 
+  def update
+    if @shield_timeout and Gosu::milliseconds > @shield_timeout then
+      @shield_timeout = nil
+      @shield = false
+    end
+  end
+
+  def shield(seconds=nil)
+    unless seconds
+      return @shield
+    end
+
+    @shield = true
+    @shield_timeout = Gosu::milliseconds + (1000 * seconds)
+  end
 
   def go_right
     @x = @x + @speed
@@ -55,7 +72,11 @@ class Player
   end
   
   def draw
-    @image.draw_rot(@x, @y, ZOrder::Player, IMAGE_ROT)
+    if @shield then
+      @image.draw_rot(@x, @y, ZOrder::Player, IMAGE_ROT, 0.5, 0.5, 1, 1, 0xFF0000FF)
+    else
+      @image.draw_rot(@x, @y, ZOrder::Player, IMAGE_ROT)
+    end
   end
 
   def collect(items)

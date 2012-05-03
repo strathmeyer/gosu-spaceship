@@ -24,7 +24,7 @@ class GameWindow < Gosu::Window
     @player = Player.new(self, width, height)
 
     # Put the player in the middle of the screen
-    @player.warp(20, 20)
+    @player.warp(width / 2, height / 2)
 
     # Create the honeybun list
     @honeybuns = []
@@ -34,6 +34,8 @@ class GameWindow < Gosu::Window
 
     # Last update
     @last_update = 1
+
+    @game_start = Gosu::milliseconds
   end
   
   def update
@@ -54,6 +56,9 @@ class GameWindow < Gosu::Window
       @player.go_down
     end
 
+    # Check for shield
+    @player.update
+
     # Try to collect any honeybuns
     @player.collect(@honeybuns)
 
@@ -63,7 +68,7 @@ class GameWindow < Gosu::Window
       h.move 
     end
 
-    # Call our "ever_second" function every ten seconds
+    # Call our "every_second" function every second
     seconds = Gosu::milliseconds / 1000
     if seconds > @last_update then
       every_second
@@ -72,7 +77,10 @@ class GameWindow < Gosu::Window
 
     # Exit the program if the player runs out of fuel
     if @player.fuel < 1 then
-      puts "YOU LOSE"
+      puts "GAME OVER"
+
+      time_played = (Gosu::milliseconds - @game_start) / 1000
+      puts "You played for #{time_played} seconds."
       exit
     end
 
@@ -82,10 +90,19 @@ class GameWindow < Gosu::Window
 
     if @honeybuns.size < 3 then
       # select a random type of honeybun
-      type = [Honeybun, Honeybun, BlueHoneybun].sample
+      types = [
+        Honeybun, 
+        PoisonHoneybun,
+        Honeybun,
+        EnergyHoneybun
+      ]
+
+      @last_type ||= 0
+      nexttype = types[@last_type]
+      @last_type = (@last_type + 1) % types.length
 
       # add a honebun of that type to our list
-      @honeybuns.push(type.new(self))
+      @honeybuns.push(nexttype.new(self))
     end
 
     @player.fuel = @player.fuel - 1

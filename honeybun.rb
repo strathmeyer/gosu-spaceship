@@ -38,10 +38,6 @@ class Honeybun
     _draw(color)
   end
 
-  def affect_player(player)
-  	player.fuel = player.fuel + 5
-  end
-
   def width
   	@img.width
   end
@@ -61,10 +57,16 @@ class Honeybun
   	@x = @x % @window.width
   	@y = @y % @window.height
   end
+
+  def affect_player(player)
+    player.fuel = player.fuel + 2
+  end
+
 end
 
 
-class BlueHoneybun < Honeybun
+class EnergyHoneybun < Honeybun
+  # looks blue. gives you speed.
 
   def draw
     draw_color(0, 0, 255)
@@ -72,6 +74,24 @@ class BlueHoneybun < Honeybun
 
   def affect_player(player)
     player.speed = player.speed + 2
+
+    #player.shield(5)
+  end
+
+end
+
+class PoisonHoneybun < Honeybun
+  # looks green. removes fuel.
+
+  def draw
+    draw_color(0, 255, 0)
+  end
+
+  def affect_player(player)
+    if not player.shield then
+      player.fuel = player.fuel - 10
+      player.speed = player.speed - 3
+    end
   end
 
 end
