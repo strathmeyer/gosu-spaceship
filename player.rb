@@ -1,5 +1,4 @@
 class Player
-  IMAGE_ROT = 38
   MAX_SPEED = 20
   MAX_FUEL = 100
   
@@ -73,9 +72,9 @@ class Player
   
   def draw
     if @shield then
-      @image.draw_rot(@x, @y, ZOrder::Player, IMAGE_ROT, 0.5, 0.5, 1, 1, 0xFF0000FF)
+      @image.draw_rot(@x, @y, ZOrder::Player, 0, 0.5, 0.5, 1, 1, 0xFF0000FF)
     else
-      @image.draw_rot(@x, @y, ZOrder::Player, IMAGE_ROT)
+      @image.draw_rot(@x, @y, ZOrder::Player, 0)
     end
   end
 

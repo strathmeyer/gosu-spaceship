@@ -75,7 +75,7 @@ class EnergyHoneybun < Honeybun
   def affect_player(player)
     player.speed = player.speed + 2
 
-    #player.shield(5)
+    player.shield(5)
   end
 
 end
