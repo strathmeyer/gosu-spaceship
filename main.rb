@@ -36,6 +36,8 @@ class GameWindow < Gosu::Window
     @last_update = 1
 
     @game_start = Gosu::milliseconds
+
+    @bg = Gosu::Image.new(self, "images/couch.jpg", false)
   end
   
   def update
@@ -94,7 +96,12 @@ class GameWindow < Gosu::Window
         Honeybun, 
         PoisonHoneybun,
         Honeybun,
-        EnergyHoneybun
+        EnergyHoneybun,
+        Honeybun, 
+        PoisonHoneybun,
+        Honeybun,
+        EnergyHoneybun,
+        GoldHoneybun
       ]
 
       @last_type ||= 0
@@ -116,6 +123,10 @@ class GameWindow < Gosu::Window
     end
 
     @font.draw("Fuel: #{@player.fuel}   Speed: #{@player.speed}", 10, 10, ZOrder::UI)
+
+    img_factor_x = width / @bg.width.to_f
+    img_factor_y = height / @bg.height.to_f
+    @bg.draw(0, 0, ZOrder::Background, img_factor_x, img_factor_y)
   end
 end
 

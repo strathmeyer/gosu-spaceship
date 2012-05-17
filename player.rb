@@ -6,7 +6,7 @@ class Player
 
   def initialize(window, max_x, max_y)
     @window = window
-    @image = Gosu::Image.new(window, "spaceship.png", false)
+    @image = Gosu::Image.new(window, "images/spaceship.png", false)
     @x = 0.0
     @y = 0.0
     @max_x = max_x

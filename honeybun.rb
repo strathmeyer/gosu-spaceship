@@ -2,7 +2,7 @@ class Honeybun
   attr_reader :x, :y, :speed
 
   def initialize(window)
-  	@img = Gosu::Image.new(window, "honeybun_small.png", false)
+  	@img = Gosu::Image.new(window, "images/honeybun_small.png", false)
 
     @speed = 5
     @angle = rand(360)
@@ -91,6 +91,26 @@ class PoisonHoneybun < Honeybun
     if not player.shield then
       player.fuel = player.fuel - 10
       player.speed = player.speed - 3
+    end
+  end
+
+end
+
+class GoldHoneybun < Honeybun
+  
+  def draw
+    draw_color(255, 255, 0)
+  end
+
+  def affect_player(player)
+    if not player.shield then
+      player.fuel = 100
+      player.speed = 20
+    end
+
+    if player.shield then
+      player.fuel = player.fuel + 10
+      player.speed = player.speed + 10
     end
   end
 
