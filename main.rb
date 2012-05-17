@@ -4,6 +4,7 @@ require "bundler/setup"
 require 'gosu'
 require_relative 'player'
 require_relative 'honeybun'
+require_relative 'background'
 
 module ZOrder
   Background, Items, Player, UI = *0..3
@@ -37,24 +38,24 @@ class GameWindow < Gosu::Window
 
     @game_start = Gosu::milliseconds
 
-    @bg = Gosu::Image.new(self, "images/couch.jpg", false)
+    @bg = Background.new(self)
   end
   
   def update
 
     # Move the player
 
-  	if button_down? Gosu::KbLeft then
+  	if button_down? Gosu::KbLeft
       @player.go_left
     end
-    if button_down? Gosu::KbRight then
+    if button_down? Gosu::KbRight
       @player.go_right
     end
-    if button_down? Gosu::KbUp then
+    if button_down? Gosu::KbUp
       @player.go_up
     end
 
-    if button_down? Gosu::KbDown then
+    if button_down? Gosu::KbDown
       @player.go_down
     end
 
@@ -72,13 +73,13 @@ class GameWindow < Gosu::Window
 
     # Call our "every_second" function every second
     seconds = Gosu::milliseconds / 1000
-    if seconds > @last_update then
+    if seconds > @last_update
       every_second
       @last_update = seconds
     end
 
     # Exit the program if the player runs out of fuel
-    if @player.fuel < 1 then
+    if @player.fuel < 1
       puts "GAME OVER"
 
       time_played = (Gosu::milliseconds - @game_start) / 1000
@@ -90,32 +91,34 @@ class GameWindow < Gosu::Window
 
   def every_second
 
-    if @honeybuns.size < 3 then
-      # select a random type of honeybun
-      types = [
-        Honeybun, 
-        PoisonHoneybun,
-        Honeybun,
-        EnergyHoneybun,
-        Honeybun, 
-        PoisonHoneybun,
-        Honeybun,
-        EnergyHoneybun,
-        GoldHoneybun
-      ]
+    # Do we need to add more honeybuns?
+    if @honeybuns.size < 3
 
-      @last_type ||= 0
-      nexttype = types[@last_type]
-      @last_type = (@last_type + 1) % types.length
+      if rand(100) == 0
+        next_type = GoldHoneybun
+      else
+        # select a random type of honeybun
+        types = [
+          Honeybun, 
+          PoisonHoneybun,
+          Honeybun,
+          EnergyHoneybun
+        ]
+
+        @last_type ||= 0
+        next_type = types[@last_type]
+        @last_type = (@last_type + 1) % types.length
+        end
 
       # add a honebun of that type to our list
-      @honeybuns.push(nexttype.new(self))
+      @honeybuns.push(next_type.new(self))
     end
 
     @player.fuel = @player.fuel - 1
   end
   
   def draw
+    @bg.draw
     @player.draw
 
     @honeybuns.each do |h|
@@ -123,10 +126,6 @@ class GameWindow < Gosu::Window
     end
 
     @font.draw("Fuel: #{@player.fuel}   Speed: #{@player.speed}", 10, 10, ZOrder::UI)
-
-    img_factor_x = width / @bg.width.to_f
-    img_factor_y = height / @bg.height.to_f
-    @bg.draw(0, 0, ZOrder::Background, img_factor_x, img_factor_y)
   end
 end
 
